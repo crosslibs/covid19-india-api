@@ -112,6 +112,7 @@ function parseAndSendResponse(res, data, callback) {
 
   const response = {
     updatedAt: updatedAt,
+    name: 'India',
     cases: {
       active: numActive,
       cured: numCured,

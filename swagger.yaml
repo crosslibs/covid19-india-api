@@ -42,19 +42,23 @@ paths:
         200:
           description: "fetch data successful"
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/COVIDData"
         500:
           description: "error while fetching the data"
           schema:
             $ref: "#/definitions/ErrorMessage"
 definitions:
-  ApiResponse:
+  COVIDData:
     type: "object"
     properties:
       updatedAt:
         type: "string"
         format: "date-time"
         description: "Time when the stats are last updated"
+      name:
+        type: "string"
+        description: "Country name"
+        example: "India"
       cases:
         $ref: "#/definitions/CasesData"
       states:
