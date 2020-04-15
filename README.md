@@ -1,7 +1,5 @@
 # API for COVID-19 India Data from official source, Ministry of Health and Family Welfare (mohfw.gov.in)
 
-
-
 # Build and Start the service
 
 ## Run locally
@@ -40,11 +38,6 @@ Alternatively, you can also view the API documentation by clicking [here](https:
 
 ## Access the current COVID-19 cases in India and across the states from mohfw.gov.in through this API
 HTTP GET [http://localhost:8080/v1/data/current](http://localhost:8080/v1/data/current)
-
-## Access the  COVID-19 cases in India and across the states as of a specific date through this API
-
-### For example to access the COVID-19 case count in India as of 2020-04-14 00:00:00 UTC time:
-HTTP GET [http://localhost:8080/v1/data?date=2020-04-14T00:00:00Z](http://localhost:8080/v1/data?date=2020-04-14T00:00:00Z)
 
 ## Contact
 For any queries, please reach out to me at cpdevws@gmail.com or post an issue in the repo.

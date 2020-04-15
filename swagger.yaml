@@ -13,7 +13,7 @@
 
 swagger: "2.0"
 info:
-  description: "APIs that provide you official Coronavirus COVID-19 cases data in India from the Ministry of Health and Family Welfare, [https://www.mohfw.gov.in](https://www.mohfw.gov.in). There are two APIs: one that provides you data directly from [https://www.mohfw.gov.in](https://www.mohfw.gov.in) and the second, historical data stored in BigQuery."
+  description: "API that provides current official Coronavirus COVID-19 cases data in India directly from the Ministry of Health and Family Welfare, [https://www.mohfw.gov.in](https://www.mohfw.gov.in)."
   version: "1.0.0"
   title: "COVID-19 India API"
   contact:
@@ -22,20 +22,18 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "latest data"
-  description: "Get latest data from MoHFW website"
+- name: "current official data"
+  description: "Get current data from MoHFW website"
   externalDocs:
     description: "Source"
     url: "https://www.mohfw.gov.in"
-- name: "historical data"
-  description: "Get historical data. Data available from March 12 2020"
 schemes:
 - "http"
 paths:
   /v1/data/current:
     get:
       tags:
-      - "latest data"
+      - "current official data"
       summary: "Fetch the latest COVID-19 data from https://www.mohfw.gov.in"
       operationId: "getCurrentData"
       produces:
@@ -49,35 +47,6 @@ paths:
           description: "error while fetching the data"
           schema:
             $ref: "#/definitions/ErrorMessage"
-  /v1/data:
-    get:
-      tags:
-      - "historical data"
-      summary: "Fetch data about COVID-19 cases in India on a specified date"
-      operationId: "get"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "date"
-        in: "query"
-        description: "Date for which the count of cases is requested. Must be specified in ISO8601 format e.g. 2020-04-15T00:00:00Z. If omitted, the current date will be used as input."
-        required: false
-        type: "string"
-        format: "date"
-        default: "today"
-      responses:
-        200:
-          description: "fetch data successful"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        400:
-          description: "invalid date specified"
-          schema:
-            $ref: "#/definitions/ErrorMessage"
-        500:
-          description: "error occured while fetching data"
-          schema:
-           $ref: "#/definitions/ErrorMessage"
 definitions:
   ApiResponse:
     type: "object"

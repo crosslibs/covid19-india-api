@@ -128,19 +128,12 @@ function parseAndSendResponse(res, data, callback) {
 
 const app = express();
 const SERVER_PORT = 8080;
-const FETCH_CURRENT_DATA_URL = '/v1/data/current';
-const FETCH_DATA_URL = '/v1/data';
+const CURRENT_DATA_URL = '/v1/data/current';
 
 /**
  * Fetch current data from MoHFW
  */
-app.get(FETCH_CURRENT_DATA_URL, (req, res) => currentCovid19Data(res));
-
-
-/**
- * Fetch historical data
- */
-app.get(FETCH_DATA_URL, (req, res) => currentCovid19Data(res));
+app.get(CURRENT_DATA_URL, (req, res) => currentCovid19Data(res));
 
 /**
  * Swagger UI
