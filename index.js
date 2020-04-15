@@ -14,9 +14,12 @@
  */
 
 'user strict';
-const http = require('http');
-const https = require('https');
 const cheerio = require('cheerio');
+const express = require('express');
+const https = require('https');
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDoc = YAML.load('./swagger.yaml');
 
 /**
  * Send response
@@ -35,7 +38,7 @@ function sendResponse(res, code, data) {
  * Ministry of Health and Family Welfare (mohfw.gov.in)
  * @param {object} response server response object
  */
-function covid19CaseData(response) {
+function currentCovid19Data(response) {
   const DOWNLOAD_URL = 'www.mohfw.gov.in';
   const httpsOptions = {
     hostname: DOWNLOAD_URL,
@@ -123,9 +126,40 @@ function parseAndSendResponse(res, data, callback) {
   callback(res, 200, response);
 }
 
-
+const app = express();
 const SERVER_PORT = 8080;
-http.createServer(
-    (req, res) => covid19CaseData(res),
-).listen(SERVER_PORT);
+const FETCH_CURRENT_DATA_URL = '/v1/data/current';
+const FETCH_DATA_URL = '/v1/data';
 
+/**
+ * Fetch current data from MoHFW
+ */
+app.get(FETCH_CURRENT_DATA_URL, (req, res) => currentCovid19Data(res));
+
+
+/**
+ * Fetch historical data
+ */
+app.get(FETCH_DATA_URL, (req, res) => currentCovid19Data(res));
+
+/**
+ * Swagger UI
+ */
+app.use('/v1/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+
+/**
+ * Catch all routes
+ */
+app.all('*',
+    (req, res) => {
+      if (req.method != 'GET') {
+        sendResponse(res, 405, {error: 'Unsupported HTTP method'});
+      } else {
+        sendResponse(res, 404, {error: 'Requested URL does not exist'});
+      }
+    });
+
+/**
+ * Start the server
+ */
+app.listen(SERVER_PORT, () => console.log(`Listening on port ${SERVER_PORT}`));
