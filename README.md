@@ -34,5 +34,6 @@ docker run -p 8080:8080 -d covid19-india:latest
 
 # API Documentation
 
+You can refer to the API documentation by clicking [here](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/crosslibs/covid19-india-api/master/swagger.yaml).
 
 
