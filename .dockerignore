@@ -1,0 +1,6 @@
+.git
+.devcontainer
+node_modules
+.eslintrc
+npm-debug.log
+cloudbuild.yaml

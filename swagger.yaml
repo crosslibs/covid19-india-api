@@ -1,0 +1,125 @@
+swagger: "2.0"
+info:
+  description: "APIs that provide you official Coronavirus COVID-19 cases data in India from the Ministry of Health and Family Welfare, [https://www.mohfw.gov.in](https://www.mohfw.gov.in). There are two APIs: one that provides you data directly from [https://www.mohfw.gov.in](https://www.mohfw.gov.in) and the second, historical data stored in BigQuery."
+  version: "1.0.0"
+  title: "COVID-19 India API"
+  contact:
+    email: "chaitanyaprakash.n@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "latest data"
+  description: "Get latest data from MoHFW website"
+  externalDocs:
+    description: "Source"
+    url: "https://www.mohfw.gov.in"
+- name: "historical data"
+  description: "Get historical data. Data available from March 12 2020"
+schemes:
+- "http"
+paths:
+  /v1/data/current:
+    get:
+      tags:
+      - "latest data"
+      summary: "Fetch the latest COVID-19 data from https://www.mohfw.gov.in"
+      operationId: "getCurrentData"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "fetch data successful"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        500:
+          description: "error while fetching the data"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
+  /v1/data:
+    get:
+      tags:
+      - "historical data"
+      summary: "Fetch data about COVID-19 cases in India on a specified date"
+      operationId: "get"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "date"
+        in: "query"
+        description: "Date for which the count of cases is requested. Must be specified in ISO8601 format e.g. 2020-04-15T00:00:00Z. If omitted, the current date will be used as input."
+        required: false
+        type: "string"
+        format: "date"
+        default: "today"
+      responses:
+        200:
+          description: "fetch data successful"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        400:
+          description: "invalid date specified"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
+        500:
+          description: "error occured while fetching data"
+          schema:
+           $ref: "#/definitions/ErrorMessage"
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      updatedAt:
+        type: "string"
+        format: "date-time"
+        description: "Time when the stats are last updated"
+      cases:
+        $ref: "#/definitions/CasesData"
+      states:
+        type: "array"
+        items:
+            $ref: "#/definitions/StatesData"
+  CasesData:
+    type: "object"
+    properties:
+      active:
+        type: "integer"
+        format: "int32"
+        description: "Total number of active cases"
+        example: 123
+      cured:
+        type: "integer"
+        format: "int32"
+        description: "Total number of cured / discharged cases"
+        example: 100
+      deaths:
+        type: "integer"
+        format: "int32"
+        description: "Total number of COVID related deaths"
+        example: 50
+      migrated:
+        type: "integer"
+        format: "int32"
+        description: "Total number of migrated cases"
+        example: 1
+      total:
+        type: "integer"
+        format: "int32"
+        description: "Total number of COVID-19 cases. Sum of total active, cured, deaths and migrated cases"
+        example: 174
+  StatesData:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the state"
+        example: "Andhra Pradesh"
+      cases:
+        $ref: "#/definitions/CasesData"
+  ErrorMessage:
+    type: "object"
+    properties:
+      error:
+        type: "string"
+        description: "error description"
+        example: "ENOENT the host name specified is not found"
