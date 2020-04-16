@@ -21,12 +21,12 @@ npm start
 
 ```bash
 # Build Docker image
-docker build -t covid19-india:latest .
+docker build -t covid19-india-api:latest .
 ```
 
 ```bash
 # Start container
-docker run -p 8080:8080 -d covid19-india:latest
+docker run -p 8080:8080 -d covid19-india-api:latest
 ```
 
 
