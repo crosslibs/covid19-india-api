@@ -73,8 +73,15 @@ function parseAndSendResponse(res, data, callback) {
   const $ = cheerio.load(data);
 
   const updatedAtStr = $('div .status-update > h2 > span').text();
-  const updatedAt = new Date(
-      Date.parse(updatedAtStr.substring(updatedAtStr.indexOf(': ')+1).trim()));
+  const dateAndTimeStr =
+    updatedAtStr
+        .substring(updatedAtStr.indexOf(': ')+1)
+        .replace(/, /, ' ')
+        .replace(/ IST /, '')
+        .replace('(', ' ')
+        .replace(')', '')
+        .trim();
+  const updatedAt = new Date(Date.parse(dateAndTimeStr));
   const numActive = parseInt(
       $('div .site-stats-count ul').find('.bg-blue strong').text().trim());
   const numCured = parseInt(
